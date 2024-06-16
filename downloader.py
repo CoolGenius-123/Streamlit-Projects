@@ -12,6 +12,27 @@ def main():
     downloads_dir = "downloads"
     file_path = os.path.join(downloads_dir, file_name)
 
+    # List all files in the downloads directory
+    if os.path.exists(downloads_dir):
+        st.subheader("Files in the downloads directory:")
+        for filename in os.listdir(downloads_dir):
+            file_link = os.path.join(downloads_dir, filename)
+            st.write(f"{filename}: {file_link}")
+            if st.button(f"Delete {filename}"):
+                os.remove(file_link)
+                st.success(f"Deleted {filename}")
+
+            # Check if the file exists and provide a download button
+            if os.path.exists(file_link):
+                with open(file_link, 'rb') as file:
+                    # file_data = file.read()
+                    st.download_button(
+                        label=f"Download {filename}",
+                        data=file,
+                        file_name=filename,
+                        mime='application/octet-stream'
+                        )
+
     if st.button("Download"):
         try:
             # Delete the directory and its contents if it exists
@@ -38,13 +59,6 @@ def main():
                 st.error("ERROR, something went wrong")
             else:
                 st.success(f"File downloaded successfully as {file_name} in the {downloads_dir} directory")
-                with open(file_path, 'rb') as file:
-                    btn = st.download_button(
-                        label="Download File",
-                        data=file,
-                        file_name=file_name,
-                        mime='application/octet-stream'
-                    )
         except Exception as e:
             st.error(f"An error occurred: {e}")
 
