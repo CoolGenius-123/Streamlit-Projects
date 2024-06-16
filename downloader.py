@@ -38,6 +38,13 @@ def main():
                 st.error("ERROR, something went wrong")
             else:
                 st.success(f"File downloaded successfully as {file_name} in the {downloads_dir} directory")
+                with open(file_path, 'rb') as file:
+                    btn = st.download_button(
+                        label="Download File",
+                        data=file,
+                        file_name=file_name,
+                        mime='application/octet-stream'
+                    )
         except Exception as e:
             st.error(f"An error occurred: {e}")
 
